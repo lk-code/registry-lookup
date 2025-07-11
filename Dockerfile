@@ -15,18 +15,19 @@ RUN dotnet restore "source/RegistryLookup.Frontend/RegistryLookup.Frontend.cspro
 # Publish Blazor frontend
 RUN dotnet publish "source/RegistryLookup.Frontend/RegistryLookup.Frontend.csproj" -c $BUILD_CONFIGURATION -o /frontend_dist
 
-# Copy Blazor output into backend wwwroot
-RUN mkdir -p /src/source/RegistryLookup.Backend/wwwroot \
-    && cp -r /frontend_dist/wwwroot/* /src/source/RegistryLookup.Backend/wwwroot/
-
 # Publish backend
-RUN dotnet publish "source/RegistryLookup.Backend/RegistryLookup.Backend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "source/RegistryLookup.Backend/RegistryLookup.Backend.csproj" -c $BUILD_CONFIGURATION -o /backend_dist /p:UseAppHost=false
 
 FROM nginx:alpine AS final
+EXPOSE 80
+
 RUN rm -rf /usr/share/nginx/html/*
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
-COPY --from=build /app/publish /app
+
+COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
+
+COPY --from=build /backend_dist /app
 WORKDIR /app
 
 CMD ["/bin/sh", "-c", "dotnet RegistryLookup.Backend.dll & nginx -g 'daemon off;'"]
