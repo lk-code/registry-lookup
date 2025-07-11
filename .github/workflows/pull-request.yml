@@ -6,7 +6,6 @@ on:
 
 env:
  DOTNET_VERSION: "9.0.x"
- WORKING_DIRECTORY: "./source/RegistryLookup"
 
 jobs:
  
