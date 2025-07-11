@@ -5,8 +5,6 @@ WORKDIR /src
 COPY ["RegistryLookup/RegistryLookup.csproj", "RegistryLookup/"]
 RUN dotnet restore "RegistryLookup/RegistryLookup.csproj"
 COPY . .
-WORKDIR "/src/RegistryLookup"
-RUN dotnet build "RegistryLookup.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
