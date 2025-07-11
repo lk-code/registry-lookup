@@ -1,0 +1,35 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<MudContainer Fixed="true"
+              Class="mt-5">
+
+    <MudPaper Square="true"
+              Elevation="25"
+              Class="pa-5">
+
+        <MudTextField @bind-Value="HostAddressInputValue"
+                      Label="Registry-Host"
+                      Variant="Variant.Outlined"
+                      OnBlur="HandleBlur"/>
+
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error"
+                      Class="mt-3">
+                @_errorMessage
+            </MudAlert>
+        }
+
+        @if (_isBusy)
+        {
+            <MudStack AlignItems="AlignItems.Center" Class="mt-5">
+                <MudProgressCircular Color="Color.Primary"
+                                     Indeterminate="true"/>
+            </MudStack>
+        }
+
+    </MudPaper>
+
+</MudContainer>

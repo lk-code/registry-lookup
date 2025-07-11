@@ -1,0 +1,6 @@
+@RegistryLookup.Service_HostAddress = http://localhost:5105
+
+GET {{RegistryLookup.Service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

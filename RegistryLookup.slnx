@@ -4,10 +4,18 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path=".dockerignore" />
+    <File Path="Dockerfile" />
+    <File Path="icon_128.png" />
+    <File Path="nginx.conf" />
+    <File Path="RegistryLookup.slnx" />
   </Folder>
   <Folder Name="/Solution/workflows/">
     <File Path=".github\workflows\build.yml" />
     <File Path=".github\workflows\pull-request.yml" />
   </Folder>
-  <Project Path="source\RegistryLookup\\RegistryLookup.csproj" Type="Classic C#" />
+  <Project Path="source\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" Type="Classic C#" />
+  <Project Path="source\RegistryLookup.Backend\RegistryLookup.Backend.csproj" Type="Classic C#" />
+  <Project Path="source\RegistryLookup.Core\RegistryLookup.Core.csproj" Type="Classic C#" />
+  <Project Path="source\RegistryLookup.DockerRegistryV2\RegistryLookup.DockerRegistryV2.csproj" Type="Classic C#" />
+  <Project Path="source\RegistryLookup.Frontend\RegistryLookup.Frontend.csproj" Type="Classic C#" />
 </Solution>

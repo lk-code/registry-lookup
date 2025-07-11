@@ -1,6 +1,6 @@
 # registry-lookup
 
-![fregistry-lookup](https://raw.githubusercontent.com/lk-code/fregistry-lookup/main/icon_128.png)
+![registry-lookup](https://raw.githubusercontent.com/lk-code/registry-lookup/main/icon_128.png)
 
 [![Version](https://img.shields.io/docker/v/lkcode/registry-lookup)](https://img.shields.io/docker/v/lkcode/registry-lookup)
 [![License](https://img.shields.io/github/license/lk-code/registry-lookup.svg)](https://github.com/lk-code/registry-lookup/blob/master/LICENSE)
