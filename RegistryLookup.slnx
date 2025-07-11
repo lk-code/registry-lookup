@@ -1,0 +1,9 @@
+﻿<Solution>
+  <Folder Name="/Solution/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path=".dockerignore" />
+  </Folder>
+  <Project Path="source\RegistryLookup\\RegistryLookup.csproj" Type="Classic C#" />
+</Solution>
