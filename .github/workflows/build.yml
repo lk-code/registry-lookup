@@ -16,6 +16,7 @@ env:
   WORKING_DIRECTORY: "./source/RegistryLookup"
   DOCKER_IMAGE: "docker.io/lkcode/registry-lookup"
   DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
+  APP_SETTINGS: "RegistryLookup/appsettings.json"
 
 jobs:
 
@@ -49,6 +50,16 @@ jobs:
           tags: |
             type=raw,value=${{ env.VERSION }}
             type=raw,value=latest
+
+      - name: Update appsettings.json
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.APP_SETTINGS }}
+
+      - name: cat appsettings.json
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          cat ${{ env.APP_SETTINGS }}
   
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.18.0
