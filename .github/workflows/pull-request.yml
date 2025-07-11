@@ -6,7 +6,7 @@ on:
 
 env:
   DOTNET_VERSION: "9.0.x"
-  DOCKER_FILE: "source/RegistryLookup/Dockerfile"
+  DOCKER_CONTEXT: "source/RegistryLookup"
     
 jobs:
 
@@ -23,4 +23,4 @@ jobs:
   
       - name: Build Docker Image
         run: |
-          docker build -t test-image -f ${{ env.DOCKER_FILE }} .
+          docker build -t test-image ${{ env.DOCKER_CONTEXT }}

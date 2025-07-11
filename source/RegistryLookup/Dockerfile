@@ -1,9 +1,12 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-RUN dotnet restore "source/RegistryLookup/RegistryLookup.csproj"
 COPY . .
+RUN dotnet restore "RegistryLookup.csproj"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
@@ -12,4 +15,4 @@ RUN dotnet publish "RegistryLookup.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 FROM nginx:alpine AS final
 RUN rm -rf /usr/share/nginx/html/*
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
+COPY --from=publish /app/publish/wwwroot /usr/share/nginx/html

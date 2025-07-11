@@ -14,7 +14,7 @@ env:
   VERSION: "1.0.${{ github.run_number }}"
   DOTNET_VERSION: "9.0.x"
   DOCKER_IMAGE: docker.io/lkcode/registry-lookup"
-  DOCKER_FILE: "source/RegistryLookup/Dockerfile"
+  DOCKER_CONTEXT: "/source/RegistryLookup"
   DOCKER_PLATFORMS: "linux/amd64"
 
 jobs:
@@ -50,7 +50,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.18.0
         with:
-          file: ${{ env.DOCKER_FILE }}
+          context: ${{ env.DOCKER_CONTEXT }}
+          file: Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

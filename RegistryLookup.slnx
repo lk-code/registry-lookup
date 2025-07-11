@@ -4,7 +4,10 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path=".dockerignore" />
-    <File Path="nginx.conf" />
+  </Folder>
+  <Folder Name="/Solution/workflows/">
+    <File Path=".github\workflows\build.yml" />
+    <File Path=".github\workflows\pull-request.yml" />
   </Folder>
   <Project Path="source\RegistryLookup\\RegistryLookup.csproj" Type="Classic C#" />
 </Solution>
