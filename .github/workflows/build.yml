@@ -15,7 +15,7 @@ env:
   DOTNET_VERSION: "9.0.x"
   WORKING_DIRECTORY: "./source/RegistryLookup"
   DOCKER_IMAGE: "docker.io/lkcode/registry-lookup"
-  DOCKER_PLATFORMS: "linux/amd64"
+  DOCKER_PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
 
 jobs:
 
@@ -46,6 +46,9 @@ jobs:
         uses: docker/metadata-action@v5.7.0
         with:
           images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=raw,value=${{ env.VERSION }}
+            type=raw,value=latest
   
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.18.0
