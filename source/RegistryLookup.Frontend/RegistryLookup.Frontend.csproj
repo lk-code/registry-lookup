@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-        <RootNamespace>dev.lkcode.RegistryLookup</RootNamespace>
+        <RootNamespace>dev.lkcode.RegistryLookup.Frontend</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,9 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
         <Content Update="wwwroot\appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

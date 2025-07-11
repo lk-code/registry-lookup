@@ -3,7 +3,7 @@ using dev.lkcode.RegistryLookup.DockerRegistryV2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace dev.lkcode.RegistryLookup.Pages;
+namespace dev.lkcode.RegistryLookup.Frontend.Pages;
 
 public partial class Home : ComponentBase, IDisposable
 {
@@ -25,6 +25,11 @@ public partial class Home : ComponentBase, IDisposable
     private void HandleBlur(FocusEventArgs args)
     {
         _errorMessage = null;
+
+        if (string.IsNullOrEmpty(HostAddressInputValue))
+        {
+            return;
+        }
 
         if (!Uri.TryCreate(HostAddressInputValue, UriKind.Absolute, out Uri? hostUri))
         {
