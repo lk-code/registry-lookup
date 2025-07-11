@@ -15,7 +15,7 @@ env:
   DOTNET_VERSION: "9.0.x"
   WORKING_DIRECTORY: "./source/RegistryLookup"
   DOCKER_IMAGE: "docker.io/lkcode/registry-lookup"
-  DOCKER_PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
+  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
 
 jobs:
 
