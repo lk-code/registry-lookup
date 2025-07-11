@@ -5,7 +5,8 @@ on:
   branches: [ "main" ]
 
 env:
- DOTNET_VERSION: "9.0.x"
+  DOTNET_VERSION: "9.0.x"
+  DOCKER_WORKING_DIRECTORY: "./source/RegistryLookup"
 
 jobs:
  
@@ -21,6 +22,6 @@ jobs:
      uses: docker/setup-buildx-action@v3
 
    - name: Build Docker Image
-     working-directory: ./source/RegistryLookup
+     working-directory: ${{ env.DOCKER_WORKING_DIRECTORY }}
      run: |
       docker build -t test-image .
