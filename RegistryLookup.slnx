@@ -4,6 +4,7 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path=".dockerignore" />
+    <File Path="nginx.conf" />
   </Folder>
   <Project Path="source\RegistryLookup\\RegistryLookup.csproj" Type="Classic C#" />
 </Solution>
