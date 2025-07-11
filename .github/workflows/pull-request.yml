@@ -23,5 +23,6 @@ jobs:
      uses: docker/setup-buildx-action@v3
 
    - name: Build Docker Image
+     working-directory: ${{ env.DOCKER_CONTEXT }}
      run: |
-      docker build -t test-image -f ${{ env.DOCKER_FILE }} ${{ env.DOCKER_CONTEXT }}
+      docker build -t test-image .
