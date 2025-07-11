@@ -5,8 +5,8 @@ on:
   branches: [ "main" ]
 
 env:
-  DOTNET_VERSION: "9.0.x"
-  DOCKER_WORKING_DIRECTORY: "./source/RegistryLookup"
+ DOTNET_VERSION: "9.0.x"
+ WORKING_DIRECTORY: "./source/RegistryLookup"
 
 jobs:
  
@@ -18,10 +18,30 @@ jobs:
    - name: Checkout repository
      uses: actions/checkout@v4.2.2
 
+   - name: Setup .NET
+     uses: actions/setup-dotnet@3.4.2
+     with:
+      dotnet-version: ${{ env.DOTNET_VERSION }}
+
+   - name: Restore dependencies
+     working-directory: ${{ env.WORKING_DIRECTORY }}
+     run: |
+      dotnet restore
+
+   - name: Build
+     working-directory: ${{ env.WORKING_DIRECTORY }}
+     run: |
+      dotnet build --configuration Release --no-restore
+
+   - name: Test
+     working-directory: ${{ env.WORKING_DIRECTORY }}
+     run: |
+      dotnet test --configuration Release
+
    - name: Set up Docker Buildx
      uses: docker/setup-buildx-action@v3
 
    - name: Build Docker Image
-     working-directory: ${{ env.DOCKER_WORKING_DIRECTORY }}
+     working-directory: ${{ env.WORKING_DIRECTORY }}
      run: |
       docker build -t test-image .
