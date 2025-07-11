@@ -23,4 +23,4 @@ jobs:
   
       - name: Build Docker Image
         run: |
-          docker build -t test-image .
+          docker build -t test-image -f ${{ env.DOCKER_FILE }} .
