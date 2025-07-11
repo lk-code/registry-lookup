@@ -27,4 +27,9 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" />
+      <ProjectReference Include="..\RegistryLookup.DockerRegistryV2\RegistryLookup.DockerRegistryV2.csproj" />
+    </ItemGroup>
+
 </Project>
