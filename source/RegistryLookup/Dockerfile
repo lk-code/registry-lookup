@@ -3,7 +3,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY ["RegistryLookup/RegistryLookup.csproj", "RegistryLookup/"]
-RUN dotnet restore "RegistryLookup/RegistryLookup.csproj"
+RUN dotnet restore "source/RegistryLookup/RegistryLookup.csproj"
 COPY . .
 
 FROM build AS publish
