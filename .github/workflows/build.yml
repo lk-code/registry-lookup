@@ -1,0 +1,72 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  VERSION: "1.0.${{ github.run_number }}"
+  DOTNET_VERSION: "9.0.x"
+  DOCKER_IMAGE: docker.io/lkcode/registry-lookup"
+  DOCKER_FILE: "source/RegistryLookup/Dockerfile"
+  DOCKER_PLATFORMS: "linux/amd64"
+
+jobs:
+
+  build-test-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@3.4.2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+  
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.4.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.7.0
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+  
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          file: ${{ env.DOCKER_FILE }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: ${{ env.DOCKER_PLATFORMS }}
+  
+  post-build:
+    runs-on: ubuntu-latest
+  
+    needs:
+      - build-test-deploy
+  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+  
+      - name: Set Version Git Tag
+        run: |
+          git tag ${{ env.VERSION }}
+          git push origin ${{ env.VERSION }}
