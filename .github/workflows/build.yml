@@ -16,7 +16,7 @@ env:
   WORKING_DIRECTORY: "./source/RegistryLookup"
   DOCKER_IMAGE: "docker.io/lkcode/registry-lookup"
   DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
-  APP_SETTINGS: "RegistryLookup/wwwroot/appsettings.json"
+  APP_SETTINGS: "wwwroot/appsettings.json"
 
 jobs:
 
