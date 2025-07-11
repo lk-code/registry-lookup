@@ -6,8 +6,6 @@ on:
 
 env:
  DOTNET_VERSION: "9.0.x"
- DOCKER_CONTEXT: "./source/RegistryLookup"
- DOCKER_FILE: "./source/RegistryLookup/Dockerfile"
 
 jobs:
  
