@@ -2,15 +2,17 @@
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
+COPY ["RegistryLookup/RegistryLookup.csproj", "RegistryLookup/"]
+RUN dotnet restore "RegistryLookup/RegistryLookup.csproj"
 COPY . .
-RUN dotnet restore
+WORKDIR "/src/RegistryLookup"
+RUN dotnet build "RegistryLookup.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-RUN dotnet publish -c Release -o /app/publish
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "RegistryLookup.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM nginx:alpine AS final
-
 RUN rm -rf /usr/share/nginx/html/*
-
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
