@@ -21,6 +21,6 @@ jobs:
      uses: docker/setup-buildx-action@v3
 
    - name: Build Docker Image
-     working-directory: ../source/RegistryLookup
+     working-directory: ./source/RegistryLookup
      run: |
       docker build -t test-image .
