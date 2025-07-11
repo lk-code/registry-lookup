@@ -18,8 +18,12 @@ RUN dotnet publish "source/RegistryLookup.Frontend/RegistryLookup.Frontend.cspro
 # Publish backend
 RUN dotnet publish "source/RegistryLookup.Backend/RegistryLookup.Backend.csproj" -c $BUILD_CONFIGURATION -o /backend_dist /p:UseAppHost=false
 
-FROM nginx:alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 EXPOSE 80
+
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN rm -rf /usr/share/nginx/html/*
 
@@ -30,4 +34,4 @@ COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 COPY --from=build /backend_dist /app
 WORKDIR /app
 
-CMD ["/bin/sh", "-c", "dotnet RegistryLookup.Backend.dll & nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "dotnet /app/RegistryLookup.Backend.dll & nginx -g 'daemon off;'"]
