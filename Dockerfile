@@ -1,6 +1,5 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 80
+﻿# This Dockerfile is used for a combined multi-arch build of Blazor WASM and REST API
+# Recommended to use Docker Buildx for multi-architecture builds
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -33,5 +32,6 @@ COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 
 COPY --from=build /backend_dist /app
 WORKDIR /app
+# This is the working environment for the backend
 
 CMD ["/bin/sh", "-c", "dotnet /app/RegistryLookup.Backend.dll & nginx -g 'daemon off;'"]
