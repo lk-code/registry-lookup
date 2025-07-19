@@ -35,4 +35,4 @@ COPY --from=build /backend_dist /app
 WORKDIR /app
 # This is the working environment for the backend
 
-CMD ["/bin/sh", "-c", "dotnet /app/RegistryLookup.Backend.dll & nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "dotnet /app/RegistryLookup.Backend.dll & nginx -g \"daemon off;\""]

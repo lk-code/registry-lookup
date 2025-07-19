@@ -6,7 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
         <RootNamespace>dev.lkcode.RegistryLookup.Frontend</RootNamespace>
-        <RunAOTCompilation>false</RunAOTCompilation>
     </PropertyGroup>
 
     <ItemGroup>
