@@ -10,7 +10,6 @@ env:
 jobs:
  
  pull-request-check:
-  
   runs-on: ubuntu-latest
   
   steps:
@@ -29,6 +28,11 @@ jobs:
    - name: Build
      run: |
       dotnet build --configuration Release --no-restore
+      
+   - name: Install Playwright
+     shell: pwsh
+     run: |
+      ./source/RegistryLookup.Tests.System/bin/Release/net9.0/playwright.ps1 install
 
    - name: Test
      run: |
