@@ -18,7 +18,8 @@ RUN dotnet publish "source/RegistryLookup.Frontend/RegistryLookup.Frontend.cspro
 RUN dotnet publish "source/RegistryLookup.Backend/RegistryLookup.Backend.csproj" -c $BUILD_CONFIGURATION -o /backend_dist /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
-EXPOSE 80
+EXPOSE 80 5000
+ENV ASPNETCORE_URLS=http://+:5000
 
 RUN apt-get update && \
     apt-get install -y nginx && \
