@@ -26,7 +26,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm -rf /usr/share/nginx/html/*
-
+RUN rm /etc/nginx/sites-enabled/default
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
