@@ -31,10 +31,19 @@ jobs:
      run: |
       dotnet build --configuration Release --no-restore
 
+   - name: Install Kiota CLI
+     run: |
+      dotnet tool install --global Microsoft.OpenApi.Kiota
+
    - name: Generate Client
      shell: bash
      run: |
-      ./build-client.sh
+      kiota generate \
+        --language csharp \
+        --class-name RestClient \
+        --namespace-name "$NAMESPACE" \
+        --openapi "$OPENAPI_FILE" \
+        --output "$OUTPUT_DIR" \
 
    - name: Build Client
      run: |
