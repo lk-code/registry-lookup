@@ -84,6 +84,15 @@ jobs:
      run: |
       dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
 
+   - name: Generate Client
+     shell: bash
+     run: |
+      ./build-client.sh
+
+   - name: Build Client
+     run: |
+      dotnet build --configuration Release --no-restore
+
    - name: Upload Build Artifact
      uses: actions/upload-artifact@v4.6.2
      with:
