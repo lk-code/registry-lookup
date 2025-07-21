@@ -25,12 +25,20 @@
         }
       }
     },
-    "/registry/availability": {
+    "/registry/proxy": {
       "get": {
         "tags": [
           "RegistryLookup.Backend"
         ],
         "parameters": [
+          {
+            "name": "httpMethod",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "registryHost",
             "in": "query",
