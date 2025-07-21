@@ -6,7 +6,8 @@ using Microsoft.Kiota.Serialization.Form;
 using Microsoft.Kiota.Serialization.Json;
 using Microsoft.Kiota.Serialization.Multipart;
 using Microsoft.Kiota.Serialization.Text;
-using RegistryLookup.Client.Weatherforecast;
+using RegistryLookup.Client.Registry;
+using RegistryLookup.Client.VersionNamespace;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,10 +20,15 @@ namespace RegistryLookup.Client
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class RestClient : BaseRequestBuilder
     {
-        /// <summary>The weatherforecast property</summary>
-        public global::RegistryLookup.Client.Weatherforecast.WeatherforecastRequestBuilder Weatherforecast
+        /// <summary>The registry property</summary>
+        public global::RegistryLookup.Client.Registry.RegistryRequestBuilder Registry
         {
-            get => new global::RegistryLookup.Client.Weatherforecast.WeatherforecastRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::RegistryLookup.Client.Registry.RegistryRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The version property</summary>
+        public global::RegistryLookup.Client.VersionNamespace.VersionRequestBuilder Version
+        {
+            get => new global::RegistryLookup.Client.VersionNamespace.VersionRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::RegistryLookup.Client.RestClient"/> and sets the default values.

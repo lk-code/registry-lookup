@@ -1,14 +1,14 @@
 ﻿<Solution>
   <Folder Name="/Backend/">
-    <Project Path="source\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" Type="Classic C#" />
     <Project Path="source\RegistryLookup.Backend\RegistryLookup.Backend.csproj" Type="Classic C#" />
     <Project Path="source\RegistryLookup.Core\RegistryLookup.Core.csproj" Type="Classic C#" />
-    <Project Path="source\RegistryLookup.DockerRegistryV2\RegistryLookup.DockerRegistryV2.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Client/">
     <Project Path="source\RegistryLookup.Client\RegistryLookup.Client.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Frontend/">
+    <Project Path="source\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="source\RegistryLookup.DockerRegistryV2\RegistryLookup.DockerRegistryV2.csproj" Type="Classic C#" />
     <Project Path="source\RegistryLookup.Frontend\RegistryLookup.Frontend.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Solution/">
