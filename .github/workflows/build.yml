@@ -44,6 +44,24 @@ jobs:
      run: |
       dotnet build --configuration Release --no-restore
 
+   - name: Install Kiota CLI
+     run: |
+      dotnet tool install --global Microsoft.OpenApi.Kiota
+
+   - name: Generate Client
+     shell: bash
+     run: |
+      kiota generate \
+        --language csharp \
+        --class-name RestClient \
+        --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+        --openapi ${{ env.OPENAPI_FILE }} \
+        --output ${{ env.CLIENT_OUTPUT_DIR }} \
+
+   - name: Build Client
+     run: |
+      dotnet build --configuration Release --no-restore
+
    - name: Install Playwright
      shell: pwsh
      run: |
@@ -63,11 +81,26 @@ jobs:
         --build-arg FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }} \
         --build-arg BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }} \
         --tag test-image .
+ 
+ post-build:
+  runs-on: ubuntu-latest
+  needs:
+   - build-test
+  
+  steps:
+   - name: Checkout repository
+     uses: actions/checkout@v4
+
+   - name: Set Version Git Tag
+     run: |
+      git tag ${{ env.VERSION }}
+      git push origin ${{ env.VERSION }}
+
 
  client-deploy:
   runs-on: ubuntu-latest
   needs:
-   - build-test
+   - post-build
   
   steps:
    - name: Checkout repository
@@ -117,7 +150,7 @@ jobs:
  docker-deploy:
   runs-on: ubuntu-latest
   needs:
-   - build-test
+   - post-build
   
   steps:
    - name: Checkout repository
@@ -168,19 +201,3 @@ jobs:
       build-args: |
         FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }}
         BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }}
- 
- post-build:
-  runs-on: ubuntu-latest
-  needs:
-   - build-test
-   - client-deploy
-   - docker-deploy
-  
-  steps:
-   - name: Checkout repository
-     uses: actions/checkout@v4
-
-   - name: Set Version Git Tag
-     run: |
-      git tag ${{ env.VERSION }}
-      git push origin ${{ env.VERSION }}
