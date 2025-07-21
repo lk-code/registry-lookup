@@ -6,6 +6,8 @@ on:
 
 env:
  DOTNET_VERSION: "9.0.x"
+ FRONTEND_APPSETTINGS_FILE: "./source/RegistryLookup.Frontend/wwwroot/appsettings.json"
+ BACKEND_APPSETTINGS_FILE: "./source/RegistryLookup.Backend/appsettings.json"
 
 jobs:
  
