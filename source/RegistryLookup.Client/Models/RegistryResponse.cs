@@ -2,7 +2,6 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
-using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.IO;
 using System;
@@ -10,41 +9,37 @@ namespace RegistryLookup.Client.Models
 {
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     #pragma warning disable CS1591
-    public partial class WeatherForecast : IAdditionalDataHolder, IParsable
+    public partial class RegistryResponse : IAdditionalDataHolder, IParsable
     #pragma warning restore CS1591
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>The date property</summary>
-        public Date? Date { get; set; }
-        /// <summary>The summary property</summary>
+        /// <summary>The content property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? Summary { get; set; }
+        public string? Content { get; set; }
 #nullable restore
 #else
-        public string Summary { get; set; }
+        public string Content { get; set; }
 #endif
-        /// <summary>The temperatureC property</summary>
-        public int? TemperatureC { get; set; }
-        /// <summary>The temperatureF property</summary>
-        public int? TemperatureF { get; set; }
+        /// <summary>The httpStatusCode property</summary>
+        public int? HttpStatusCode { get; set; }
         /// <summary>
-        /// Instantiates a new <see cref="global::RegistryLookup.Client.Models.WeatherForecast"/> and sets the default values.
+        /// Instantiates a new <see cref="global::RegistryLookup.Client.Models.RegistryResponse"/> and sets the default values.
         /// </summary>
-        public WeatherForecast()
+        public RegistryResponse()
         {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::RegistryLookup.Client.Models.WeatherForecast"/></returns>
+        /// <returns>A <see cref="global::RegistryLookup.Client.Models.RegistryResponse"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::RegistryLookup.Client.Models.WeatherForecast CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::RegistryLookup.Client.Models.RegistryResponse CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new global::RegistryLookup.Client.Models.WeatherForecast();
+            return new global::RegistryLookup.Client.Models.RegistryResponse();
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -54,10 +49,8 @@ namespace RegistryLookup.Client.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "date", n => { Date = n.GetDateValue(); } },
-                { "summary", n => { Summary = n.GetStringValue(); } },
-                { "temperatureC", n => { TemperatureC = n.GetIntValue(); } },
-                { "temperatureF", n => { TemperatureF = n.GetIntValue(); } },
+                { "content", n => { Content = n.GetStringValue(); } },
+                { "httpStatusCode", n => { HttpStatusCode = n.GetIntValue(); } },
             };
         }
         /// <summary>
@@ -67,10 +60,8 @@ namespace RegistryLookup.Client.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteDateValue("date", Date);
-            writer.WriteStringValue("summary", Summary);
-            writer.WriteIntValue("temperatureC", TemperatureC);
-            writer.WriteIntValue("temperatureF", TemperatureF);
+            writer.WriteStringValue("content", Content);
+            writer.WriteIntValue("httpStatusCode", HttpStatusCode);
             writer.WriteAdditionalData(AdditionalData);
         }
     }
