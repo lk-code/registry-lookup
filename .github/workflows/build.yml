@@ -17,6 +17,7 @@ env:
  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
  FRONTEND_APPSETTINGS_FILE: "./source/RegistryLookup.Frontend/wwwroot/appsettings.json"
  BACKEND_APPSETTINGS_FILE: "./source/RegistryLookup.Backend/appsettings.json"
+ CLIENT_CSPROJ: "./source/RegistryLookup.Client/RegistryLookup.Client.csproj"
 
 jobs:
  
@@ -81,7 +82,7 @@ jobs:
    - name: Build
      shell: pwsh
      run: |
-      dotnet build --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }} source/
+      dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
 
    - name: Upload Build Artifact
      uses: actions/upload-artifact@v4.6.2
