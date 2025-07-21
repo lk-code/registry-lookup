@@ -7,4 +7,8 @@
         <RootNamespace>dev.lkcode.RegistryLookup.Core</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Extensions\" />
+    </ItemGroup>
+
 </Project>

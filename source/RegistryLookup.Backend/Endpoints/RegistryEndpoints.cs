@@ -11,6 +11,7 @@ public static class RegistryEndpoints
         app.MapGet("/registry/proxy", async ([FromQuery] string httpMethod,
             [FromQuery] string registryHost) =>
         {
+            Uri requestUri = new(registryHost);
             HttpClient client = new();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -18,13 +19,13 @@ public static class RegistryEndpoints
             {
                 HttpResponseMessage response = httpMethod.ToLowerInvariant() switch
                 {
-                    "get" => await client.GetAsync(registryHost),
-                    "post" => await client.PostAsync(registryHost, null),
-                    "put" => await client.PutAsync(registryHost, null),
-                    "delete" => await client.DeleteAsync(registryHost),
-                    "head" => await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, registryHost)),
-                    "options" => await client.SendAsync(new HttpRequestMessage(HttpMethod.Options, registryHost)),
-                    "patch" => await client.PatchAsync(registryHost, null),
+                    "get" => await client.GetAsync(requestUri),
+                    "post" => await client.PostAsync(requestUri, null),
+                    "put" => await client.PutAsync(requestUri, null),
+                    "delete" => await client.DeleteAsync(requestUri),
+                    "head" => await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, requestUri)),
+                    "options" => await client.SendAsync(new HttpRequestMessage(HttpMethod.Options, requestUri)),
+                    "patch" => await client.PatchAsync(requestUri, null),
                     _ => throw new NotSupportedException($"HTTP method '{httpMethod}' is not supported.")
                 };
                 stopwatch.Stop();

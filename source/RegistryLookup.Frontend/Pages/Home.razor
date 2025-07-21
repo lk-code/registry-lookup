@@ -1,35 +1,100 @@
 ﻿@page "/"
+@using dev.lkcode.RegistryLookup.Abstractions
+
+@inject IRegistryHostFactory RegistryHostFactory
+@inject IBackendProvider BackendProvider
+@inject ISnackbar Snackbar
 
 <PageTitle>Home</PageTitle>
 
 <MudContainer Fixed="true"
               Class="mt-5">
 
-    <MudPaper Square="true"
-              Elevation="25"
-              Class="pa-5">
+    @if (_isBackendAvailable)
+    {
+        <MudPaper Square="true"
+                  Elevation="25"
+                  Class="pa-5">
 
-        <MudTextField @bind-Value="HostAddressInputValue"
-                      Label="Registry-Host"
-                      Variant="Variant.Outlined"
-                      OnBlur="HandleBlur"/>
+            <MudTextField @bind-Value="HostAddressInputValue"
+                          Label="Registry-Host"
+                          Variant="Variant.Outlined"
+                          OnBlur="HandleBlur"/>
 
-        @if (!string.IsNullOrEmpty(_errorMessage))
-        {
-            <MudAlert Severity="Severity.Error"
-                      Class="mt-3">
-                @_errorMessage
-            </MudAlert>
-        }
+            @if (_checkingRegistryAvailability)
+            {
+                <MudStack AlignItems="AlignItems.Center" Class="mt-5">
+                    <MudProgressCircular Color="Color.Primary"
+                                         Indeterminate="true"/>
+                </MudStack>
+            }
 
-        @if (_isBusy)
-        {
+            @if (_registryAvailable
+                 && _loadingRegistryIndex)
+            {
+                <MudSkeleton Animation="Animation.Wave"
+                             SkeletonType="SkeletonType.Circle"
+                             Width="80px" Height="80px" Class="mt-3"/>
+                <MudSkeleton Animation="Animation.Wave"
+                             SkeletonType="SkeletonType.Rectangle"
+                             Height="110px" Width="400px" Class="mt-3"/>
+                <MudSkeleton Animation="Animation.Wave"
+                             Height="32px" Class="mt-1"/>
+                <MudSkeleton Animation="Animation.Wave"
+                             Height="32px" Class="mt-1"/>
+                <MudSkeleton Animation="Animation.Wave"
+                             Height="32px" Class="mt-1"/>
+            }
+
+            @if (_registryAvailable
+                 && !_loadingRegistryIndex)
+            {
+                <MudDataGrid T="IRegistryEntry" Items="@_registryIndex">
+                    <Columns>
+                        <PropertyColumn Property="x => x.Name"/>
+                    </Columns>
+                </MudDataGrid>
+            }
+
+        </MudPaper>
+    }
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <MudPaper Square="true"
+                  Elevation="25"
+                  Class="pa-5">
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Severity="Severity.Error"
+                          Class="mt-3">
+                    @_errorMessage
+                </MudAlert>
+            }
+            @if (!string.IsNullOrEmpty(_errorAdditionalMessage))
+            {
+                <MudAlert Severity="Severity.Error"
+                          Class="mt-3">
+                    <code>@_errorAdditionalMessage</code>
+                </MudAlert>
+            }
+
+        </MudPaper>
+    }
+
+    @if (_checkingBackend)
+    {
+        <MudPaper Square="true"
+                  Elevation="25"
+                  Class="pa-5">
+
             <MudStack AlignItems="AlignItems.Center" Class="mt-5">
                 <MudProgressCircular Color="Color.Primary"
                                      Indeterminate="true"/>
             </MudStack>
-        }
 
-    </MudPaper>
+        </MudPaper>
+    }
 
 </MudContainer>
