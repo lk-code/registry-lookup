@@ -31,8 +31,15 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 
+ARG FRONTEND_APPSETTINGS_FILE
+COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/appsettings.json
+
 COPY --from=build /backend_dist /app
 WORKDIR /app
+
+ARG BACKEND_APPSETTINGS_FILE
+COPY $BACKEND_APPSETTINGS_FILE /app/appsettings.json
+
 # This is the working environment for the backend
 
 CMD ["/bin/sh", "-c", "dotnet /app/RegistryLookup.Backend.dll & nginx -g \"daemon off;\""]

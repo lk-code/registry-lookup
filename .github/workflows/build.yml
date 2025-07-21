@@ -15,7 +15,8 @@ env:
  DOTNET_VERSION: "9.0.x"
  DOCKER_IMAGE: "docker.io/lkcode/registry-lookup"
  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
- APP_SETTINGS: "./source/RegistryLookup.Backend/appsettings.json"
+ FRONTEND_APPSETTINGS_FILE: "./source/RegistryLookup.Frontend/wwwroot/appsettings.json"
+ BACKEND_APPSETTINGS_FILE: "./source/RegistryLookup.Backend/appsettings.json"
 
 jobs:
  
@@ -82,13 +83,21 @@ jobs:
        type=raw,value=${{ env.VERSION }}
        type=raw,value=latest
 
+   - name: update Frontend appsettings.json
+     run: |
+      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.FRONTEND_APPSETTINGS_FILE }}
+
+   - name: cat Frontend appsettings.json
+     run: |
+      cat ${{ env.FRONTEND_APPSETTINGS_FILE }}
+
    - name: update Backend appsettings.json
      run: |
-      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.APP_SETTINGS }}
+      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.BACKEND_APPSETTINGS_FILE }}
 
    - name: cat Backend appsettings.json
      run: |
-      cat ${{ env.APP_SETTINGS }}
+      cat ${{ env.BACKEND_APPSETTINGS_FILE }}
 
    - name: Build and push Docker image
      uses: docker/build-push-action@v6.18.0
@@ -98,6 +107,9 @@ jobs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
       platforms: ${{ env.DOCKER_PLATFORMS }}
+      build-args: |
+        FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }}
+        BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }}
  
  post-build:
   runs-on: ubuntu-latest
