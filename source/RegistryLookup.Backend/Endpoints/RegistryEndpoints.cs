@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using dev.lkcode.RegistryLookup.Backend.Endpoints.Responses;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ public static class RegistryEndpoints
         {
             HttpClient client = new();
 
+            Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
                 HttpResponseMessage response = httpMethod.ToLowerInvariant() switch
@@ -25,20 +27,24 @@ public static class RegistryEndpoints
                     "patch" => await client.PatchAsync(registryHost, null),
                     _ => throw new NotSupportedException($"HTTP method '{httpMethod}' is not supported.")
                 };
+                stopwatch.Stop();
+
                 string content = await response.Content.ReadAsStringAsync();
-                
-                return new RegistryResponse((int)response.StatusCode!, content);
+
+                return new RegistryResponse((int)response.StatusCode!, content, stopwatch.ElapsedMilliseconds);
             }
             catch (HttpRequestException err)
             {
-                return new RegistryResponse((int)err.StatusCode!, err.Message);
+                stopwatch.Stop();
+                return new RegistryResponse((int)err.StatusCode!, err.Message, stopwatch.ElapsedMilliseconds);
             }
             catch (Exception err)
             {
-                return new RegistryResponse(999, err.Message);
+                stopwatch.Stop();
+                return new RegistryResponse(999, err.Message, stopwatch.ElapsedMilliseconds);
             }
         });
-        
+
         return app;
     }
 }

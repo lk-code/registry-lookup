@@ -31,6 +31,15 @@ jobs:
      run: |
       dotnet build --configuration Release --no-restore
 
+   - name: Generate Client
+     shell: bash
+     run: |
+      ./build-client.sh
+
+   - name: Build Client
+     run: |
+      dotnet build --configuration Release --no-restore
+
    - name: Install Playwright
      shell: pwsh
      run: |
