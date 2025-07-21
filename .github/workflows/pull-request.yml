@@ -6,6 +6,8 @@ on:
 
 env:
  DOTNET_VERSION: "9.0.x"
+ FRONTEND_APPSETTINGS_FILE: "./source/RegistryLookup.Frontend/wwwroot/appsettings.json"
+ BACKEND_APPSETTINGS_FILE: "./source/RegistryLookup.Backend/appsettings.json"
 
 jobs:
  
@@ -28,7 +30,7 @@ jobs:
    - name: Build
      run: |
       dotnet build --configuration Release --no-restore
-      
+
    - name: Install Playwright
      shell: pwsh
      run: |
@@ -43,4 +45,8 @@ jobs:
 
    - name: Build Docker Image
      run: |
-      docker build -t test-image .
+      docker build \
+        --file ./Dockerfile \
+        --build-arg FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }} \
+        --build-arg BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }} \
+        --tag test-image .
