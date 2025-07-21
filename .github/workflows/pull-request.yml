@@ -8,6 +8,10 @@ env:
  DOTNET_VERSION: "9.0.x"
  FRONTEND_APPSETTINGS_FILE: "./source/RegistryLookup.Frontend/wwwroot/appsettings.json"
  BACKEND_APPSETTINGS_FILE: "./source/RegistryLookup.Backend/appsettings.json"
+ OPENAPI_FILE: "./source/RegistryLookup.Backend/RegistryLookup.Backend.json"
+ CLIENT_CSPROJ: "./source/RegistryLookup.Client/RegistryLookup.Client.csproj"
+ CLIENT_OUTPUT_DIR: "./source/RegistryLookup.Client"
+ CLIENT_NAMESPACE: "RegistryLookup.Client"
 
 jobs:
  
@@ -41,9 +45,9 @@ jobs:
       kiota generate \
         --language csharp \
         --class-name RestClient \
-        --namespace-name "$NAMESPACE" \
-        --openapi "$OPENAPI_FILE" \
-        --output "$OUTPUT_DIR" \
+        --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+        --openapi ${{ env.OPENAPI_FILE }} \
+        --output ${{ env.CLIENT_OUTPUT_DIR }} \
 
    - name: Build Client
      run: |

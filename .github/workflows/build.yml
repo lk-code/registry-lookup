@@ -17,7 +17,10 @@ env:
  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
  FRONTEND_APPSETTINGS_FILE: "./source/RegistryLookup.Frontend/wwwroot/appsettings.json"
  BACKEND_APPSETTINGS_FILE: "./source/RegistryLookup.Backend/appsettings.json"
+ OPENAPI_FILE: "./source/RegistryLookup.Backend/RegistryLookup.Backend.json"
  CLIENT_CSPROJ: "./source/RegistryLookup.Client/RegistryLookup.Client.csproj"
+ CLIENT_OUTPUT_DIR: "./source/RegistryLookup.Client"
+ CLIENT_NAMESPACE: "RegistryLookup.Client"
 
 jobs:
  
@@ -91,7 +94,12 @@ jobs:
    - name: Generate Client
      shell: bash
      run: |
-      ./build-client.sh
+      kiota generate \
+        --language csharp \
+        --class-name RestClient \
+        --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+        --openapi ${{ env.OPENAPI_FILE }} \
+        --output ${{ env.CLIENT_OUTPUT_DIR }} \
 
    - name: Build Client
      run: |
