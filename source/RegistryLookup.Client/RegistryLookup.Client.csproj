@@ -4,10 +4,38 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <Title>RegistryLookup.Client</Title>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+        <Company>$(Authors)</Company>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Authors>lk-code</Authors>
+        <Description>Registry Lookup is a modern .NET Blazor WebAssembly application that allows you to explore and browse artifacts from various registries like Docker and (in the future) NuGet, npm, and more.</Description>
+        <Copyright>MIT</Copyright>
+        <PackageProjectUrl>https://github.com/lk-code/registry-lookup</PackageProjectUrl>
+        <PackageIcon>icon_128.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/lk-code/registry-lookup</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Kiota.Bundle" Version="1.19.0" />
+        <PackageReference Include="Microsoft.Kiota.Bundle" Version="1.19.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\icon_128.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 
 </Project>
