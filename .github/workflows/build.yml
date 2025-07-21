@@ -54,7 +54,11 @@ jobs:
 
    - name: Build Docker Image
      run: |
-      docker build -t test-image .
+      docker build \
+        --file ./Dockerfile \
+        --build-arg FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }} \
+        --build-arg BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }} \
+        --tag test-image .
 
  client-deploy:
   runs-on: ubuntu-latest
