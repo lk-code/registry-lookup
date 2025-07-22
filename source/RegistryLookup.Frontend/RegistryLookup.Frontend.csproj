@@ -30,7 +30,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" />
+      <ProjectReference Include="..\RegistryLookup.DockerHubRegistry\RegistryLookup.DockerHubRegistry.csproj" />
       <ProjectReference Include="..\RegistryLookup.DockerRegistryV2\RegistryLookup.DockerRegistryV2.csproj" />
+      <ProjectReference Include="..\RegistryLookup.NuGetOrgRegistry\RegistryLookup.NuGetOrgRegistry.csproj" />
     </ItemGroup>
 
 </Project>

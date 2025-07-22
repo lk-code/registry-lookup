@@ -2,5 +2,5 @@ namespace dev.lkcode.RegistryLookup.Abstractions;
 
 public interface IRegistryHostFactory
 {
-    IRegistryHost Create(Uri hostUrl);
+    Task<IRegistryHost> CreateAsync(Uri hostUrl, CancellationToken cancellationToken);
 }

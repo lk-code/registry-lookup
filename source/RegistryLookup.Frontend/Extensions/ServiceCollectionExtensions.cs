@@ -17,6 +17,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IBackendProvider, BackendProvider>();
         services.AddTransient<IBackendRegistryProvider, BackendRegistryProvider>();
         
+        // add registry hosts
+        
         // add kiota client
         services.AddSingleton<IAuthenticationProvider, AnonymousAuthenticationProvider>();
         services.AddSingleton<IRequestAdapter>(sp =>

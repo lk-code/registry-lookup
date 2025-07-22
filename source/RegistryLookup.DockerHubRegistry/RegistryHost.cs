@@ -1,32 +1,37 @@
+using System.Text.Json;
 using dev.lkcode.RegistryLookup.Abstractions;
 using dev.lkcode.RegistryLookup.Abstractions.Exceptions;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
-namespace dev.lkcode.RegistryLookup.DockerRegistryV2;
+namespace dev.lkcode.RegistryLookup.DockerHubRegistry;
 
 public class RegistryHost : IRegistryHost
 {
     private readonly ILogger<RegistryHost> _logger;
     private readonly IBackendRegistryProvider _registryProvider;
+    private static readonly string[] ALLOWED_HOSTS = ["hub.docker.com", "docker.io"];
+    private static readonly string CATALOG_PATH = "/";
 
     public Uri Host { get; init; }
-
-    private const string CATALOG_PATH = "/_catalog";
 
     public RegistryHost(
         ILogger<RegistryHost> logger,
         IBackendRegistryProvider registryProvider,
-        Uri hostUrl)
+        Uri hostUri)
     {
         _logger = logger;
         _registryProvider = registryProvider;
-        Host = hostUrl;
+        Host = hostUri;
     }
 
     public async Task<HandleLevel> CanHandleHost(CancellationToken cancellationToken)
     {
-        return HandleLevel.UNKNOWN;
+        if (ALLOWED_HOSTS.Any(x => Host.Host.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+        {
+            return HandleLevel.SUPPORTED;
+        }
+
+        return HandleLevel.UNSUPPORTED;
     }
 
     public async Task<bool> IsAvailableAsync(CancellationToken cancellationToken)

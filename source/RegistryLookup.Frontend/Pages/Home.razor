@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using dev.lkcode.RegistryLookup.Abstractions
+@using dev.lkcode.RegistryLookup.Frontend.Models
 
 @inject IRegistryHostFactory RegistryHostFactory
 @inject IBackendProvider BackendProvider
@@ -16,10 +17,38 @@
                   Elevation="25"
                   Class="pa-5">
 
-            <MudTextField @bind-Value="HostAddressInputValue"
-                          Label="Registry-Host"
-                          Variant="Variant.Outlined"
-                          OnBlur="HandleBlur"/>
+            <MudGrid>
+
+                <MudItem xs="12" sm="7" md="9">
+                    <MudTextField @bind-Value="HostAddressInputValue"
+                                  Margin="Margin.Dense"
+                                  Label="Registry-Host"
+                                  Variant="Variant.Outlined"
+                                  OnBlur="HandleBlur"/>
+
+                </MudItem>
+
+                <MudItem xs="12" sm="5" md="3">
+
+                    <MudSelect T="RegistryHostModel"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense"
+                               @bind-Value="_selectedHost"
+                               Label="Host auswählen">
+                        @foreach (var host in _hosts)
+                        {
+                            <MudSelectItem Value="host">
+                                <MudAvatar>
+                                    <MudImage Src="@host.IconPath" class="mr-1"/>
+                                </MudAvatar>
+                                @host.Name
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+
+                </MudItem>
+
+            </MudGrid>
 
             @if (_checkingRegistryAvailability)
             {

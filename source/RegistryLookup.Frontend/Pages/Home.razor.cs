@@ -1,4 +1,5 @@
 using dev.lkcode.RegistryLookup.Abstractions;
+using dev.lkcode.RegistryLookup.Frontend.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
@@ -18,7 +19,15 @@ public partial class Home : ComponentBase, IDisposable
     private bool _loadingRegistryIndex = false;
     private readonly CancellationTokenSource _ctsSource = new();
     private IRegistryHost? RegistryHost { get; set; } = null;
-    private List<IRegistryEntry> _registryIndex = new List<IRegistryEntry>();
+    private List<IRegistryEntry> _registryIndex = [];
+
+    private RegistryHostModel _selectedHost;
+    private List<RegistryHostModel> _hosts =
+    [
+        new("Docker Private Registry", typeof(RegistryLookup.DockerRegistryV2.RegistryHost), "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaKKoEfs7PzMWKDgD5ms2JzUhvRDpAafzA4w&s"),
+        new("Docker Hub", typeof(RegistryLookup.DockerHubRegistry.RegistryHost), "https://www.opc-router.de/wp-content/uploads/2023/07/Docker_150x150px-01-01-01.png"),
+        new("NuGet.org", typeof(RegistryLookup.NuGetOrgRegistry.RegistryHost), "https://plpsoft.vn/ckfinder/connector?command=Proxy&lang=vi&type=Files&currentFolder=%2F&hash=c245c263ce0eced480effe66bbede6b4d46c15ae&fileName=logo-og-600x600.png")
+    ];
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -95,7 +104,7 @@ public partial class Home : ComponentBase, IDisposable
         try
         {
             // load as docker registry:v2
-            RegistryHost = RegistryHostFactory.Create(hostUri);
+            RegistryHost = await RegistryHostFactory.CreateAsync(hostUri, cancellationToken);
 
             bool isAvailable = await RegistryHost.IsAvailableAsync(cancellationToken);
             await InvokeAsync(() =>
@@ -160,7 +169,7 @@ public partial class Home : ComponentBase, IDisposable
 
                 StateHasChanged();
             });
-            
+
             IReadOnlyCollection<IRegistryEntry> entries = await RegistryHost.GetEntriesAsync(CancellationToken.None);
             await InvokeAsync(() =>
             {
@@ -175,7 +184,7 @@ public partial class Home : ComponentBase, IDisposable
             await InvokeAsync(() =>
             {
                 _errorMessage = "Registry Index could not be loaded";
-                
+
                 if (err.InnerException is not null
                     && !string.IsNullOrEmpty(err.InnerException.Message))
                 {

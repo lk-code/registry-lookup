@@ -1,9 +1,9 @@
+using System.Text.Json;
 using dev.lkcode.RegistryLookup.Abstractions;
 using dev.lkcode.RegistryLookup.Abstractions.Exceptions;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
-namespace dev.lkcode.RegistryLookup.DockerRegistryV2;
+namespace dev.lkcode.RegistryLookup.NuGetOrgRegistry;
 
 public class RegistryHost : IRegistryHost
 {
@@ -26,7 +26,7 @@ public class RegistryHost : IRegistryHost
 
     public async Task<HandleLevel> CanHandleHost(CancellationToken cancellationToken)
     {
-        return HandleLevel.UNKNOWN;
+        return HandleLevel.SUPPORTED;
     }
 
     public async Task<bool> IsAvailableAsync(CancellationToken cancellationToken)
