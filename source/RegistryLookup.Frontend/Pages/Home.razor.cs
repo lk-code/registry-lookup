@@ -1,4 +1,5 @@
 using dev.lkcode.RegistryLookup.Abstractions;
+using dev.lkcode.RegistryLookup.Frontend.Factories;
 using dev.lkcode.RegistryLookup.Frontend.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -18,16 +19,20 @@ public partial class Home : ComponentBase, IDisposable
     private bool _registryAvailable = false;
     private bool _loadingRegistryIndex = false;
     private readonly CancellationTokenSource _ctsSource = new();
+    private string _searchValue = string.Empty;
     private IRegistryHost? RegistryHost { get; set; } = null;
     private List<IRegistryEntry> _registryIndex = [];
+    private DisplayConfiguration? _registryDisplayConfiguration = null;
+    private RegistryHostModel? _selectedHost;
+    private List<RegistryHostModel> _hosts = [];
 
-    private RegistryHostModel _selectedHost;
-    private List<RegistryHostModel> _hosts =
-    [
-        new("Docker Private Registry", typeof(RegistryLookup.DockerRegistryV2.RegistryHost), "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaKKoEfs7PzMWKDgD5ms2JzUhvRDpAafzA4w&s"),
-        new("Docker Hub", typeof(RegistryLookup.DockerHubRegistry.RegistryHost), "https://www.opc-router.de/wp-content/uploads/2023/07/Docker_150x150px-01-01-01.png"),
-        new("NuGet.org", typeof(RegistryLookup.NuGetOrgRegistry.RegistryHost), "https://plpsoft.vn/ckfinder/connector?command=Proxy&lang=vi&type=Files&currentFolder=%2F&hash=c245c263ce0eced480effe66bbede6b4d46c15ae&fileName=logo-og-600x600.png")
-    ];
+    public void Dispose()
+    {
+        _ctsSource?.Cancel();
+        _ctsSource?.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -42,8 +47,17 @@ public partial class Home : ComponentBase, IDisposable
                 StateHasChanged();
             });
 
-            CancellationToken cancellationToken = CancellationToken.None;
-            bool isBackendAvailable = await BackendProvider.IsBackendAvailable(cancellationToken);
+            // create and set registries for selection
+            List<RegistryHostModel> registries = await GetRegistryTypesAsync(_ctsSource.Token);
+            await InvokeAsync(() =>
+            {
+                _hosts.Clear();
+                _hosts = registries;
+
+                StateHasChanged();
+            });
+
+            bool isBackendAvailable = await BackendProvider.IsBackendAvailable(_ctsSource.Token);
 
             await InvokeAsync(() =>
             {
@@ -65,23 +79,47 @@ public partial class Home : ComponentBase, IDisposable
         }
     }
 
-    public void Dispose()
+    private async Task<List<RegistryHostModel>> GetRegistryTypesAsync(CancellationToken ct)
     {
-        _ctsSource?.Cancel();
-        _ctsSource?.Dispose();
+        string iconPathTemplate = "img/icons/{0}.svg";
+        string[] availableRegistries = Registries.GetRegistryHostTypes();
 
-        GC.SuppressFinalize(this);
+        List<RegistryHostModel> registries = [];
+        foreach (string availableRegistry in availableRegistries)
+        {
+            string iconName = availableRegistry.ToLowerInvariant();
+            string iconPath = string.Format(iconPathTemplate, iconName);
+            string icon = await ContentProvider.GetContentAsync(iconPath);
+
+            registries.Add(
+                new RegistryHostModel(availableRegistry,
+                    icon,
+                    availableRegistry));
+        }
+
+        return registries;
     }
 
-    private void HandleBlur(FocusEventArgs args)
+    private void RegistryHostTypeSelectChanged()
     {
-        _errorMessage = null;
-        _errorAdditionalMessage = null;
+        HandleRegistryValueChange();
+    }
 
-        if (string.IsNullOrEmpty(HostAddressInputValue))
+    private void HostAddressInputChanged(FocusEventArgs args)
+    {
+        HandleRegistryValueChange();
+    }
+
+    private void HandleRegistryValueChange()
+    {
+        if (_selectedHost is null
+            || string.IsNullOrEmpty(HostAddressInputValue))
         {
             return;
         }
+
+        _errorMessage = null;
+        _errorAdditionalMessage = null;
 
         if (!Uri.TryCreate(HostAddressInputValue.TrimEnd('/'), UriKind.Absolute, out Uri? hostUri))
         {
@@ -89,10 +127,12 @@ public partial class Home : ComponentBase, IDisposable
             return;
         }
 
-        _ = LoadRegistryAsync(hostUri);
+        _ = LoadRegistryAsync(_selectedHost, hostUri);
     }
 
-    private async Task LoadRegistryAsync(Uri hostUri, CancellationToken cancellationToken = default)
+    private async Task LoadRegistryAsync(RegistryHostModel registryHostModel,
+        Uri hostUri,
+        CancellationToken cancellationToken = default)
     {
         await InvokeAsync(() =>
         {
@@ -104,7 +144,7 @@ public partial class Home : ComponentBase, IDisposable
         try
         {
             // load as docker registry:v2
-            RegistryHost = await RegistryHostFactory.CreateAsync(hostUri, cancellationToken);
+            RegistryHost = await RegistryHostFactory.CreateAsync(registryHostModel.RegistryType, hostUri, cancellationToken);
 
             bool isAvailable = await RegistryHost.IsAvailableAsync(cancellationToken);
             await InvokeAsync(() =>
@@ -171,10 +211,12 @@ public partial class Home : ComponentBase, IDisposable
             });
 
             IReadOnlyCollection<IRegistryEntry> entries = await RegistryHost.GetEntriesAsync(CancellationToken.None);
+            DisplayConfiguration itemTypeTitle = RegistryHost.GetDisplayConfiguration();
             await InvokeAsync(() =>
             {
                 _registryIndex = entries.ToList();
-                _loadingRegistryIndex = true;
+                _registryDisplayConfiguration = itemTypeTitle;
+                _loadingRegistryIndex = false;
 
                 StateHasChanged();
             });
@@ -203,5 +245,19 @@ public partial class Home : ComponentBase, IDisposable
                 StateHasChanged();
             });
         }
+    }
+
+    private bool IndexFilterFunc(IRegistryEntry element) => IndexFilterFunc(element, _searchValue);
+
+    private bool IndexFilterFunc(IRegistryEntry element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        // add more
+
+        return false;
     }
 }

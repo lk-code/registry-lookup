@@ -16,9 +16,11 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IRegistryHostFactory, RegistryHostFactory>();
         services.AddTransient<IBackendProvider, BackendProvider>();
         services.AddTransient<IBackendRegistryProvider, BackendRegistryProvider>();
-        
+        services.AddScoped<IContentProvider, ContentProvider>();
+
         // add registry hosts
-        
+        services.AddRegistries(configuration);
+
         // add kiota client
         services.AddSingleton<IAuthenticationProvider, AnonymousAuthenticationProvider>();
         services.AddSingleton<IRequestAdapter>(sp =>
@@ -28,6 +30,7 @@ public static class ServiceCollectionExtensions
             {
                 throw new ArgumentNullException("Backend:Host is not configured in appsettings.");
             }
+
             IAuthenticationProvider authProvider = sp.GetRequiredService<IAuthenticationProvider>();
             HttpClient httpClient = new()
             {
@@ -40,7 +43,7 @@ public static class ServiceCollectionExtensions
             IRequestAdapter adapter = sp.GetRequiredService<IRequestAdapter>();
             return new RestClient(adapter);
         });
-        
+
         return services;
     }
 }

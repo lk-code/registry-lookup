@@ -5,40 +5,20 @@ using Microsoft.Extensions.Logging;
 
 namespace dev.lkcode.RegistryLookup.DockerHubRegistry;
 
-public class RegistryHost : IRegistryHost
+public class RegistryHost(
+    ILogger<RegistryHost> Logger,
+    IBackendRegistryProvider RegistryProvider) : RegistryBase, IRegistryHost
 {
-    private readonly ILogger<RegistryHost> _logger;
-    private readonly IBackendRegistryProvider _registryProvider;
     private static readonly string[] ALLOWED_HOSTS = ["hub.docker.com", "docker.io"];
     private static readonly string CATALOG_PATH = "/";
 
-    public Uri Host { get; init; }
-
-    public RegistryHost(
-        ILogger<RegistryHost> logger,
-        IBackendRegistryProvider registryProvider,
-        Uri hostUri)
-    {
-        _logger = logger;
-        _registryProvider = registryProvider;
-        Host = hostUri;
-    }
-
-    public async Task<HandleLevel> CanHandleHost(CancellationToken cancellationToken)
-    {
-        if (ALLOWED_HOSTS.Any(x => Host.Host.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
-        {
-            return HandleLevel.SUPPORTED;
-        }
-
-        return HandleLevel.UNSUPPORTED;
-    }
+    public DisplayConfiguration GetDisplayConfiguration() => new("Image", "Images");
 
     public async Task<bool> IsAvailableAsync(CancellationToken cancellationToken)
     {
         try
         {
-            IRegistryResult result = await _registryProvider.SendAsync("GET",
+            IRegistryResult result = await RegistryProvider.SendAsync("GET",
                 Host,
                 cancellationToken);
 
@@ -59,7 +39,7 @@ public class RegistryHost : IRegistryHost
     {
         try
         {
-            IRegistryResult result = await _registryProvider.SendAsync("GET",
+            IRegistryResult result = await RegistryProvider.SendAsync("GET",
                 Host,
                 CATALOG_PATH,
                 cancellationToken);

@@ -5,35 +5,20 @@ using Microsoft.Extensions.Logging;
 
 namespace dev.lkcode.RegistryLookup.NuGetOrgRegistry;
 
-public class RegistryHost : IRegistryHost
+public class RegistryHost(
+    ILogger<RegistryHost> Logger,
+    IBackendRegistryProvider RegistryProvider)
+    : RegistryBase, IRegistryHost
 {
-    private readonly ILogger<RegistryHost> _logger;
-    private readonly IBackendRegistryProvider _registryProvider;
-
-    public Uri Host { get; init; }
-
     private const string CATALOG_PATH = "/_catalog";
 
-    public RegistryHost(
-        ILogger<RegistryHost> logger,
-        IBackendRegistryProvider registryProvider,
-        Uri hostUrl)
-    {
-        _logger = logger;
-        _registryProvider = registryProvider;
-        Host = hostUrl;
-    }
-
-    public async Task<HandleLevel> CanHandleHost(CancellationToken cancellationToken)
-    {
-        return HandleLevel.SUPPORTED;
-    }
+    public DisplayConfiguration GetDisplayConfiguration() => new("Package", "Packages");
 
     public async Task<bool> IsAvailableAsync(CancellationToken cancellationToken)
     {
         try
         {
-            IRegistryResult result = await _registryProvider.SendAsync("GET",
+            IRegistryResult result = await RegistryProvider.SendAsync("GET",
                 Host,
                 cancellationToken);
 
@@ -54,7 +39,7 @@ public class RegistryHost : IRegistryHost
     {
         try
         {
-            IRegistryResult result = await _registryProvider.SendAsync("GET",
+            IRegistryResult result = await RegistryProvider.SendAsync("GET",
                 Host,
                 CATALOG_PATH,
                 cancellationToken);

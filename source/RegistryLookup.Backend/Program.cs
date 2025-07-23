@@ -33,11 +33,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-// HTTPS + Static + Blazor SPA
-// app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.MapFallbackToFile("index.html"); // <- wichtig für Blazor Routing
+app.MapFallbackToFile("index.html"); // <- important for Blazor Routing
 
 app.MapVersionEndpoints()
     .MapRegistryEndpoints();
