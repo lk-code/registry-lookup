@@ -35,7 +35,7 @@ public class RegistryHost(
         }
     }
 
-    public async Task<IReadOnlyCollection<IRegistryItem>> GetEntriesAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<IRegistryItem>> GetIndexAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -68,7 +68,7 @@ public class RegistryHost(
                     .Select(e => e.GetString()!)
                     .ToArray();
 
-                return repositories.Select(x => new Image(x)).ToList();
+                return repositories.Select(x => new Image(this, x)).ToList();
             }
             catch (JsonException jsonEx)
             {

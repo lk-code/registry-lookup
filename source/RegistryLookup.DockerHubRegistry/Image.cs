@@ -2,7 +2,9 @@ using dev.lkcode.RegistryLookup.Abstractions;
 
 namespace dev.lkcode.RegistryLookup.DockerHubRegistry;
 
-public record Image(string image) : IRegistryItem
+public class Image(IRegistryHost parentHost, string image) : IRegistryItem
 {
+    public IRegistryHost ParentHost { get; } = parentHost;
+
     public string Name { get; } = image;
 }

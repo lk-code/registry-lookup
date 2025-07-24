@@ -50,7 +50,7 @@ public partial class AppRegistryIndex : ComponentBase, IDisposable
                 StateHasChanged();
             });
 
-            IReadOnlyCollection<IRegistryItem> entries = await RegistryHost.GetEntriesAsync(CancellationToken.None);
+            IReadOnlyCollection<IRegistryItem> entries = await RegistryHost.GetIndexAsync(CancellationToken.None);
             DisplayConfiguration itemTypeTitle = RegistryHost.GetDisplayConfiguration();
             await InvokeAsync(() =>
             {

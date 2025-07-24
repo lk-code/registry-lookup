@@ -1,3 +1,5 @@
+@using dev.lkcode.RegistryLookup.Abstractions
+@using dev.lkcode.RegistryLookup.DockerRegistryV2
 <MudStack Class="ma-0">
 
     <MudText Typo="Typo.h6"
@@ -14,16 +16,29 @@
             <AppRegistryDetailGeneral/>
         </MudTabPanel>
 
-        <MudTabPanel Text="Tags">
-            <AppRegistryDetailTags />
-        </MudTabPanel>
+        @if (RegistryItem is ITaggable)
+        {
+            <MudTabPanel Text="Tags">
+                <AppRegistryDetailTags/>
+            </MudTabPanel>
+        }
 
-        <MudTabPanel Text="Images">
-            <AppRegistryDetailImages />
-        </MudTabPanel>
+        @if (RegistryItem is IPackagable)
+        {
+            <MudTabPanel Text="Tags">
+                <AppRegistryDetailImages/>
+            </MudTabPanel>
+        }
+
+        @if (RegistryItem is IManifestable)
+        {
+            <MudTabPanel Text="Tags">
+
+            </MudTabPanel>
+        }
 
         <MudTabPanel Text="Settings">
-            <AppRegistryDetailSettings />
+            <AppRegistryDetailSettings/>
         </MudTabPanel>
 
     </MudTabs>
