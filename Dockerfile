@@ -5,12 +5,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-ARG FRONTEND_APPSETTINGS_FILE=./source/RegistryLookup.Frontend/wwwroot/appsettings.Docker.json
-COPY $FRONTEND_APPSETTINGS_FILE source/RegistryLookup.Frontend/wwwroot/appsettings.json
-
-ARG BACKEND_APPSETTINGS_FILE=./source/RegistryLookup.Backend/appsettings.Docker.json
-COPY $BACKEND_APPSETTINGS_FILE source/RegistryLookup.Backend/appsettings.json
-
 COPY . .
 
 # Restore dependencies
@@ -39,6 +33,12 @@ COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 
 COPY --from=build /backend_dist /app
 WORKDIR /app
+
+ARG FRONTEND_APPSETTINGS_FILE=./source/RegistryLookup.Frontend/wwwroot/appsettings.Docker.json
+COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/wwwroot/appsettings.json
+
+ARG BACKEND_APPSETTINGS_FILE=./source/RegistryLookup.Backend/appsettings.Docker.json
+COPY $BACKEND_APPSETTINGS_FILE /app/appsettings.json
 
 # This is the working environment for the backend
 
