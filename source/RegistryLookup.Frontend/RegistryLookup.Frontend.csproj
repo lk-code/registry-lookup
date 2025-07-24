@@ -26,6 +26,9 @@
         <Content Update="wwwroot\appsettings.Development.json">
           <DependentUpon>appsettings.json</DependentUpon>
         </Content>
+        <Content Update="wwwroot\appsettings.Docker.json">
+          <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

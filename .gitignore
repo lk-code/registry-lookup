@@ -291,3 +291,4 @@ __pycache__/
 
 # Dev AppSettings
 appsettings.Development.json
+appsettings.Docker.json
