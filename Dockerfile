@@ -1,7 +1,7 @@
 ﻿# This Dockerfile is used for a combined multi-arch build of Blazor WASM and REST API
 # Recommended to use Docker Buildx for multi-architecture builds
 #
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+#FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 #ARG BUILD_CONFIGURATION=Release
 #WORKDIR /src
 #
@@ -33,6 +33,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 #
 #COPY --from=build /backend_dist /app
 #WORKDIR /app
+
+FROM nginx:alpine
 
 ARG FRONTEND_APPSETTINGS_FILE=./source/RegistryLookup.Frontend/wwwroot/appsettings.Docker.json
 COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/wwwroot/appsettings.json
