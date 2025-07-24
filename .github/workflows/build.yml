@@ -122,6 +122,7 @@ jobs:
    - name: Push Git Changes
      run: |
       git commit -m "Release version ${{ env.VERSION }}"
+      git push origin HEAD
       git push origin ${{ env.VERSION }}
 
  client-deploy:
