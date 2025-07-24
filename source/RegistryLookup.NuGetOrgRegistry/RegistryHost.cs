@@ -1,9 +1,9 @@
+using System.Text.Json;
 using dev.lkcode.RegistryLookup.Abstractions;
 using dev.lkcode.RegistryLookup.Abstractions.Exceptions;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
-namespace dev.lkcode.RegistryLookup.DockerRegistryV2;
+namespace dev.lkcode.RegistryLookup.NuGetOrgRegistry;
 
 public class RegistryHost(
     ILogger<RegistryHost> Logger,
@@ -12,7 +12,7 @@ public class RegistryHost(
 {
     private const string CATALOG_PATH = "/_catalog";
 
-    public DisplayConfiguration GetDisplayConfiguration() => new("Image", "Images");
+    public DisplayConfiguration GetDisplayConfiguration() => new("Package", "Packages");
 
     public async Task<bool> IsAvailableAsync(CancellationToken cancellationToken)
     {

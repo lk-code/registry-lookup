@@ -1,16 +1,16 @@
+using System.Text.Json;
 using dev.lkcode.RegistryLookup.Abstractions;
 using dev.lkcode.RegistryLookup.Abstractions.Exceptions;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
-namespace dev.lkcode.RegistryLookup.DockerRegistryV2;
+namespace dev.lkcode.RegistryLookup.DockerHubRegistry;
 
 public class RegistryHost(
     ILogger<RegistryHost> Logger,
-    IBackendRegistryProvider RegistryProvider)
-    : RegistryBase, IRegistryHost
+    IBackendRegistryProvider RegistryProvider) : RegistryBase, IRegistryHost
 {
-    private const string CATALOG_PATH = "/_catalog";
+    private static readonly string[] ALLOWED_HOSTS = ["hub.docker.com", "docker.io"];
+    private static readonly string CATALOG_PATH = "/";
 
     public DisplayConfiguration GetDisplayConfiguration() => new("Image", "Images");
 

@@ -1,6 +1,6 @@
 namespace dev.lkcode.RegistryLookup.Abstractions;
 
-public interface IRegistryEntry
+public interface IRegistryItem
 {
     string Name { get; }
 }

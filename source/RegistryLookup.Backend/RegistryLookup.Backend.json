@@ -68,7 +68,8 @@
       "RegistryResponse": {
         "required": [
           "httpStatusCode",
-          "content"
+          "content",
+          "requestElapsedMilliseconds"
         ],
         "type": "object",
         "properties": {
@@ -78,6 +79,10 @@
           },
           "content": {
             "type": "string"
+          },
+          "requestElapsedMilliseconds": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       }

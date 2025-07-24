@@ -1,35 +1,123 @@
 ﻿@page "/"
 
+@using dev.lkcode.RegistryLookup.Abstractions
+@using dev.lkcode.RegistryLookup.Frontend.Models
+@using dev.lkcode.RegistryLookup.Frontend.Components
+
+@inject IRegistryHostFactory RegistryHostFactory
+@inject IBackendProvider BackendProvider
+@inject ISnackbar Snackbar
+@inject IContentProvider ContentProvider
+
 <PageTitle>Home</PageTitle>
 
 <MudContainer Fixed="true"
               Class="mt-5">
 
-    <MudPaper Square="true"
-              Elevation="25"
-              Class="pa-5">
+    @if (_isBackendAvailable)
+    {
+        <MudPaper Elevation="25"
+                  Class="pa-5">
 
-        <MudTextField @bind-Value="HostAddressInputValue"
-                      Label="Registry-Host"
-                      Variant="Variant.Outlined"
-                      OnBlur="HandleBlur"/>
+            <MudGrid>
 
-        @if (!string.IsNullOrEmpty(_errorMessage))
+                <MudItem xs="12" sm="5" md="3">
+
+                    <MudSelect T="RegistryHostModel"
+                               SelectedValuesChanged="RegistryHostTypeSelectChanged"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense"
+                               @bind-Value="_selectedHost"
+                               Label="Select Registry Type">
+                        @foreach (var host in _hosts)
+                        {
+                            <MudSelectItem Value="host" Class="py-1 px-3">
+                                <MudGrid Spacing="0">
+                                    <MudItem xs="2" Class="d-flex align-center">
+                                        <MudIcon Icon="@host.Icon"/>
+                                    </MudItem>
+                                    <MudItem xs="10" Class="d-flex align-center">
+                                        <MudText Inline="true">@host.Name</MudText>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+
+                </MudItem>
+
+                <MudItem xs="12" sm="7" md="9">
+                    <MudTextField @bind-Value="HostAddressInputValue"
+                                  Margin="Margin.Dense"
+                                  Label="Registry-Host"
+                                  Variant="Variant.Outlined"
+                                  OnBlur="HostAddressInputChanged"/>
+
+                </MudItem>
+
+            </MudGrid>
+
+        </MudPaper>
+
+        @if (_checkingRegistryAvailability)
         {
-            <MudAlert Severity="Severity.Error"
-                      Class="mt-3">
-                @_errorMessage
-            </MudAlert>
+            <MudPaper Elevation="25"
+                      Class="mt-5 pa-5">
+
+                <MudStack AlignItems="AlignItems.Center" Class="mt-5">
+                    <MudProgressCircular Color="Color.Primary"
+                                         Indeterminate="true"/>
+                </MudStack>
+
+            </MudPaper>
         }
-
-        @if (_isBusy)
+        
+        @if (_registryAvailable)
         {
+            <MudPaper Elevation="25"
+                      Class="mt-5 pa-0">
+
+                <AppRegistryIndex @ref="AppRegistryIndex"
+                                  RegistryHost="RegistryHost"/>
+
+            </MudPaper>
+        }
+    }
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <MudPaper Elevation="25"
+                  Class="mt-5 pa-5">
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Severity="Severity.Error"
+                          Class="mt-3">
+                    @_errorMessage
+                </MudAlert>
+            }
+            @if (!string.IsNullOrEmpty(_errorAdditionalMessage))
+            {
+                <MudAlert Severity="Severity.Error"
+                          Class="mt-3">
+                    <code>@_errorAdditionalMessage</code>
+                </MudAlert>
+            }
+
+        </MudPaper>
+    }
+
+    @if (_checkingBackend)
+    {
+        <MudPaper Elevation="25"
+                  Class="mt-5 pa-5">
+
             <MudStack AlignItems="AlignItems.Center" Class="mt-5">
                 <MudProgressCircular Color="Color.Primary"
                                      Indeterminate="true"/>
             </MudStack>
-        }
 
-    </MudPaper>
+        </MudPaper>
+    }
 
 </MudContainer>

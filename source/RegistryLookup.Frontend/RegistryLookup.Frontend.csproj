@@ -11,7 +11,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.7"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.7" PrivateAssets="all"/>
-        <PackageReference Include="MudBlazor" Version="8.9.0"/>
+        <PackageReference Include="MudBlazor" Version="8.10.0" />
+        <PackageReference Include="RegistryLookup.Client" Version="1.0.25" />
     </ItemGroup>
 
     <ItemGroup>
@@ -22,11 +23,16 @@
         <Content Update="wwwroot\appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Update="wwwroot\appsettings.Development.json">
+          <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" />
+      <ProjectReference Include="..\RegistryLookup.DockerHubRegistry\RegistryLookup.DockerHubRegistry.csproj" />
       <ProjectReference Include="..\RegistryLookup.DockerRegistryV2\RegistryLookup.DockerRegistryV2.csproj" />
+      <ProjectReference Include="..\RegistryLookup.NuGetOrgRegistry\RegistryLookup.NuGetOrgRegistry.csproj" />
     </ItemGroup>
 
 </Project>

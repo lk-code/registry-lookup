@@ -1,4 +1,5 @@
 using dev.lkcode.RegistryLookup.Frontend;
+using dev.lkcode.RegistryLookup.Frontend.Extensions;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -9,5 +10,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
+builder.Services.AddFrontendServices(builder.Configuration);
 
 await builder.Build().RunAsync();
