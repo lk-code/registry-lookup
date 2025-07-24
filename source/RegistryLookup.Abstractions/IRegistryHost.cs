@@ -4,7 +4,7 @@ public interface IRegistryHost
 {
     Task<bool> IsAvailableAsync(CancellationToken cancellationToken);
     
-    Task<IReadOnlyCollection<IRegistryEntry>> GetEntriesAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<IRegistryItem>> GetEntriesAsync(CancellationToken cancellationToken);
     
     DisplayConfiguration GetDisplayConfiguration();
 }

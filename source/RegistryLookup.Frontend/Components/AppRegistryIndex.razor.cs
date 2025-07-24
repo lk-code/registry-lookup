@@ -7,7 +7,7 @@ public partial class AppRegistryIndex : ComponentBase, IDisposable
 {
     private readonly CancellationTokenSource _ctsSource = new();
     private string _searchValue = string.Empty;
-    private List<IRegistryEntry> _registryIndex = [];
+    private List<IRegistryItem> _registryIndex = [];
     private DisplayConfiguration? _registryDisplayConfiguration = null;
     private bool _loadingRegistryIndex = false;
     private string? _errorMessage = null;
@@ -50,7 +50,7 @@ public partial class AppRegistryIndex : ComponentBase, IDisposable
                 StateHasChanged();
             });
 
-            IReadOnlyCollection<IRegistryEntry> entries = await RegistryHost.GetEntriesAsync(CancellationToken.None);
+            IReadOnlyCollection<IRegistryItem> entries = await RegistryHost.GetEntriesAsync(CancellationToken.None);
             DisplayConfiguration itemTypeTitle = RegistryHost.GetDisplayConfiguration();
             await InvokeAsync(() =>
             {
@@ -87,7 +87,7 @@ public partial class AppRegistryIndex : ComponentBase, IDisposable
         }
     }
 
-    private Func<IRegistryEntry, bool> IndexFilterFunc => x =>
+    private Func<IRegistryItem, bool> IndexFilterFunc => x =>
     {
         if (string.IsNullOrWhiteSpace(_searchValue))
             return true;

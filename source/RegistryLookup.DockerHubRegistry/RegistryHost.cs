@@ -35,7 +35,7 @@ public class RegistryHost(
         }
     }
 
-    public async Task<IReadOnlyCollection<IRegistryEntry>> GetEntriesAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<IRegistryItem>> GetEntriesAsync(CancellationToken cancellationToken)
     {
         try
         {
