@@ -31,13 +31,13 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 
-ARG FRONTEND_APPSETTINGS_FILE
+ARG FRONTEND_APPSETTINGS_FILE=./source/RegistryLookup.Frontend/wwwroot/appsettings.Docker.json
 COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/appsettings.json
 
 COPY --from=build /backend_dist /app
 WORKDIR /app
 
-ARG BACKEND_APPSETTINGS_FILE
+ARG BACKEND_APPSETTINGS_FILE=./source/RegistryLookup.Backend/appsettings.Docker.json
 COPY $BACKEND_APPSETTINGS_FILE /app/appsettings.json
 
 # This is the working environment for the backend
