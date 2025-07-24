@@ -94,8 +94,29 @@ jobs:
    - name: Set Version Git Tag
      run: |
       git tag ${{ env.VERSION }}
-      git push origin ${{ env.VERSION }}
 
+   - name: update Frontend appsettings.json
+     run: |
+      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.FRONTEND_APPSETTINGS_FILE }}
+      git add ${{ env.FRONTEND_APPSETTINGS_FILE }}
+
+   - name: cat Frontend appsettings.json
+     run: |
+      cat ${{ env.FRONTEND_APPSETTINGS_FILE }}
+
+   - name: update Backend appsettings.json
+     run: |
+      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.BACKEND_APPSETTINGS_FILE }}
+      git add ${{ env.BACKEND_APPSETTINGS_FILE }}
+
+   - name: cat Backend appsettings.json
+     run: |
+      cat ${{ env.BACKEND_APPSETTINGS_FILE }}
+
+   - name: Push Git Changes
+     run: |
+      git commit -m "Release version ${{ env.VERSION }}"
+      git push origin ${{ env.VERSION }}
 
  client-deploy:
   runs-on: ubuntu-latest
@@ -173,22 +194,6 @@ jobs:
       tags: |
        type=raw,value=${{ env.VERSION }}
        type=raw,value=latest
-
-   - name: update Frontend appsettings.json
-     run: |
-      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.FRONTEND_APPSETTINGS_FILE }}
-
-   - name: cat Frontend appsettings.json
-     run: |
-      cat ${{ env.FRONTEND_APPSETTINGS_FILE }}
-
-   - name: update Backend appsettings.json
-     run: |
-      sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.BACKEND_APPSETTINGS_FILE }}
-
-   - name: cat Backend appsettings.json
-     run: |
-      cat ${{ env.BACKEND_APPSETTINGS_FILE }}
 
    - name: Build and push Docker image
      uses: docker/build-push-action@v6.18.0
