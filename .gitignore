@@ -288,3 +288,6 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 .DS_Store
+
+# Dev AppSettings
+appsettings.Development.json
