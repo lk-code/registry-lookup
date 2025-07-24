@@ -1,6 +1,8 @@
 ﻿@page "/"
+
 @using dev.lkcode.RegistryLookup.Abstractions
 @using dev.lkcode.RegistryLookup.Frontend.Models
+@using dev.lkcode.RegistryLookup.Frontend.Components
 
 @inject IRegistryHostFactory RegistryHostFactory
 @inject IBackendProvider BackendProvider
@@ -69,70 +71,14 @@
 
             </MudPaper>
         }
-
-        @if (_registryAvailable
-             && _loadingRegistryIndex)
-        {
-            <MudPaper Elevation="25"
-                      Class="mt-5 pa-5">
-
-                <MudSkeleton Animation="Animation.Wave"
-                             SkeletonType="SkeletonType.Circle"
-                             Width="80px" Height="80px" Class="mt-3"/>
-                <MudSkeleton Animation="Animation.Wave"
-                             SkeletonType="SkeletonType.Rectangle"
-                             Height="110px" Width="400px" Class="mt-3"/>
-                <MudSkeleton Animation="Animation.Wave"
-                             Height="32px" Class="mt-1"/>
-                <MudSkeleton Animation="Animation.Wave"
-                             Height="32px" Class="mt-1"/>
-                <MudSkeleton Animation="Animation.Wave"
-                             Height="32px" Class="mt-1"/>
-
-            </MudPaper>
-        }
-
-        @if (_registryAvailable
-             && !_loadingRegistryIndex)
+        
+        @if (_registryAvailable)
         {
             <MudPaper Elevation="25"
                       Class="mt-5 pa-0">
 
-                <MudTable T="IRegistryEntry"
-                          Dense="true"
-                          Striped="true"
-                          Elevation="0"
-                          Items="@_registryIndex"
-                          Filter="new Func<IRegistryEntry, bool>(IndexFilterFunc)"
-                          Class="mt-3">
-
-                    <ToolBarContent>
-                        <MudText Typo="Typo.h6">@(_registryDisplayConfiguration?.MultipleItemTypeTitle ?? "")</MudText>
-                        <MudSpacer/>
-                        <MudTextField @bind-Value="_searchValue"
-                                      Placeholder="Search for ..."
-                                      Adornment="Adornment.Start"
-                                      AdornmentIcon="@Icons.Material.Filled.Search"
-                                      IconSize="Size.Medium"
-                                      Margin="Margin.Dense"
-                                      Variant="Variant.Outlined"
-                                      Clearable="true"
-                                      Class="mt-0 me-3"/>
-                    </ToolBarContent>
-
-                    <HeaderContent>
-                        <MudTh>Name</MudTh>
-                    </HeaderContent>
-
-                    <RowTemplate>
-                        <MudTd DataLabel="Name">@context.Name</MudTd>
-                    </RowTemplate>
-
-                    <PagerContent>
-                        <MudTablePager/>
-                    </PagerContent>
-
-                </MudTable>
+                <AppRegistryIndex @ref="AppRegistryIndex"
+                                  RegistryHost="RegistryHost"/>
 
             </MudPaper>
         }
@@ -163,7 +109,7 @@
 
     @if (_checkingBackend)
     {
-        <MudPaper Elevation="25" 
+        <MudPaper Elevation="25"
                   Class="mt-5 pa-5">
 
             <MudStack AlignItems="AlignItems.Center" Class="mt-5">

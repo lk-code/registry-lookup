@@ -1,4 +1,5 @@
 using dev.lkcode.RegistryLookup.Abstractions;
+using dev.lkcode.RegistryLookup.Frontend.Components;
 using dev.lkcode.RegistryLookup.Frontend.Factories;
 using dev.lkcode.RegistryLookup.Frontend.Models;
 using Microsoft.AspNetCore.Components;
@@ -10,19 +11,16 @@ namespace dev.lkcode.RegistryLookup.Frontend.Pages;
 public partial class Home : ComponentBase, IDisposable
 {
     public string HostAddressInputValue { get; set; } = string.Empty;
+    public IRegistryHost? RegistryHost = null;
+    public AppRegistryIndex? AppRegistryIndex = null;
 
+    private readonly CancellationTokenSource _ctsSource = new();
     private string? _errorMessage = null;
     private string? _errorAdditionalMessage = null;
     private bool _checkingBackend = false;
     private bool _isBackendAvailable = false;
     private bool _checkingRegistryAvailability = false;
     private bool _registryAvailable = false;
-    private bool _loadingRegistryIndex = false;
-    private readonly CancellationTokenSource _ctsSource = new();
-    private string _searchValue = string.Empty;
-    private IRegistryHost? RegistryHost { get; set; } = null;
-    private List<IRegistryEntry> _registryIndex = [];
-    private DisplayConfiguration? _registryDisplayConfiguration = null;
     private RegistryHostModel? _selectedHost;
     private List<RegistryHostModel> _hosts = [];
 
@@ -144,7 +142,9 @@ public partial class Home : ComponentBase, IDisposable
         try
         {
             // load as docker registry:v2
-            RegistryHost = await RegistryHostFactory.CreateAsync(registryHostModel.RegistryType, hostUri, cancellationToken);
+            RegistryHost = await RegistryHostFactory.CreateAsync(registryHostModel.RegistryType,
+                hostUri,
+                cancellationToken);
 
             bool isAvailable = await RegistryHost.IsAvailableAsync(cancellationToken);
             await InvokeAsync(() =>
@@ -166,7 +166,10 @@ public partial class Home : ComponentBase, IDisposable
                 return;
             }
 
-            await LoadEntriesAsync(cancellationToken);
+            if (isAvailable)
+            {
+                await AppRegistryIndex!.ReloadAsync(cancellationToken);
+            }
         }
         catch (Exception err)
         {
@@ -191,73 +194,5 @@ public partial class Home : ComponentBase, IDisposable
                 StateHasChanged();
             });
         }
-    }
-
-    private async Task LoadEntriesAsync(CancellationToken cancellationToken = default)
-    {
-        if (RegistryHost is null)
-        {
-            return;
-        }
-
-        try
-        {
-            await InvokeAsync(() =>
-            {
-                _registryIndex.Clear();
-                _loadingRegistryIndex = true;
-
-                StateHasChanged();
-            });
-
-            IReadOnlyCollection<IRegistryEntry> entries = await RegistryHost.GetEntriesAsync(CancellationToken.None);
-            DisplayConfiguration itemTypeTitle = RegistryHost.GetDisplayConfiguration();
-            await InvokeAsync(() =>
-            {
-                _registryIndex = entries.ToList();
-                _registryDisplayConfiguration = itemTypeTitle;
-                _loadingRegistryIndex = false;
-
-                StateHasChanged();
-            });
-        }
-        catch (Exception err)
-        {
-            await InvokeAsync(() =>
-            {
-                _errorMessage = "Registry Index could not be loaded";
-
-                if (err.InnerException is not null
-                    && !string.IsNullOrEmpty(err.InnerException.Message))
-                {
-                    _errorAdditionalMessage = err.InnerException.Message;
-                }
-
-                StateHasChanged();
-            });
-        }
-        finally
-        {
-            await InvokeAsync(() =>
-            {
-                _loadingRegistryIndex = false;
-
-                StateHasChanged();
-            });
-        }
-    }
-
-    private bool IndexFilterFunc(IRegistryEntry element) => IndexFilterFunc(element, _searchValue);
-
-    private bool IndexFilterFunc(IRegistryEntry element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-
-        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        // add more
-
-        return false;
     }
 }

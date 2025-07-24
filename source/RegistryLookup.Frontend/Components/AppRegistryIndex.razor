@@ -1,0 +1,83 @@
+@using dev.lkcode.RegistryLookup.Abstractions
+
+@if (_loadingRegistryIndex)
+{
+    <MudGrid Class="mt-5 px-5 pb-5 pt-0">
+        <MudItem xs="12" sm="6" md="3" lg="2" Class="d-flex justify-center">
+            <MudSkeleton Animation="Animation.Wave"
+                         SkeletonType="SkeletonType.Circle"
+                         Width="120px" Height="120px"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="9" lg="10">
+            <MudSkeleton Animation="Animation.Wave"
+                         SkeletonType="SkeletonType.Rectangle"
+                         Height="200px"/>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="12" lg="12">
+            <MudSkeleton Animation="Animation.Wave"
+                         Height="32px" Class="mt-1"/>
+            <MudSkeleton Animation="Animation.Wave"
+                         Height="32px" Class="mt-1"/>
+            <MudSkeleton Animation="Animation.Wave"
+                         Height="32px" Class="mt-1"/>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <MudDataGrid T="IRegistryEntry"
+                 Dense="true"
+                 Striped="true"
+                 Elevation="0"
+                 Items="@_registryIndex"
+                 Filterable="true"
+                 QuickFilter="@IndexFilterFunc"
+                 Class="mt-3">
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">@(_registryDisplayConfiguration?.MultipleItemTypeTitle ?? "")</MudText>
+            <MudSpacer/>
+            <MudTextField @bind-Value="_searchValue"
+                          Placeholder="Search for ..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium"
+                          Margin="Margin.Dense"
+                          Variant="Variant.Outlined"
+                          Clearable="true"
+                          Class="mt-0 me-3"/>
+        </ToolBarContent>
+
+        <Columns>
+            <PropertyColumn Property="x => x.Name"/>
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="IRegistryEntry"/>
+        </PagerContent>
+
+    </MudDataGrid>
+}
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <MudPaper Elevation="25"
+              Class="mt-5 pa-5">
+
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error"
+                      Class="mt-3">
+                @_errorMessage
+            </MudAlert>
+        }
+        @if (!string.IsNullOrEmpty(_errorAdditionalMessage))
+        {
+            <MudAlert Severity="Severity.Error"
+                      Class="mt-3">
+                <code>@_errorAdditionalMessage</code>
+            </MudAlert>
+        }
+
+    </MudPaper>
+}
