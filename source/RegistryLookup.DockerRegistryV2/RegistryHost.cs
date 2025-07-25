@@ -82,4 +82,20 @@ public class RegistryHost(
             throw new RegistryException("", err);
         }
     }
+
+    public async Task<string> GetJsonAsync(string url,
+        CancellationToken cancellationToken)
+    {
+        IRegistryResult result = await RegistryProvider.SendAsync("GET",
+            Host,
+            url,
+            cancellationToken);
+
+        if (result.HttpStatusCode == 999)
+        {
+            throw new RegistryException(result.Content);
+        }
+
+        return result.Content;
+    }
 }

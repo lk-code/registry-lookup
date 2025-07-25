@@ -82,4 +82,9 @@ public class RegistryHost(
             throw new RegistryException("", err);
         }
     }
+
+    public Task<string> GetJsonAsync(string url, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
