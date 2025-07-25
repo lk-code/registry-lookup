@@ -207,6 +207,14 @@ jobs:
        type=raw,value=${{ env.VERSION }}
        type=raw,value=latest
 
+   - name: cat Frontend appsettings.json
+     run: |
+      cat ${{ env.FRONTEND_APPSETTINGS_FILE }}
+
+   - name: cat Backend appsettings.json
+     run: |
+      cat ${{ env.BACKEND_APPSETTINGS_FILE }}
+
    - name: Build and push Docker image
      uses: docker/build-push-action@v6.18.0
      with:
