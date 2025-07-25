@@ -28,15 +28,24 @@ public static class ServiceCollectionExtensions
             string? backendHost = configuration["Backend:Host"];
             if (string.IsNullOrEmpty(backendHost))
             {
-                throw new ArgumentNullException("Backend:Host is not configured in appsettings.");
+                throw new ArgumentNullException($"Backend:Host is not configured in appsettings.");
+            }
+
+            // if backendHost is a relative path, prepend the base URL
+            if (!backendHost.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                !backendHost.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+                string? webAddress = configuration["Frontend:Host"];
+
+                if (string.IsNullOrEmpty(webAddress))
+                    throw new ArgumentNullException($"Frontend:Host is not configured");
+
+                backendHost = $"{webAddress?.TrimEnd('/')}/{backendHost.TrimStart('/')}";
             }
 
             IAuthenticationProvider authProvider = sp.GetRequiredService<IAuthenticationProvider>();
-            HttpClient httpClient = new()
-            {
-                BaseAddress = new Uri(backendHost)
-            };
-            return new HttpClientRequestAdapter(authProvider, httpClient: httpClient);
+            return new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient { BaseAddress = new Uri(backendHost) });
         });
         services.AddScoped<RestClient>(sp =>
         {
