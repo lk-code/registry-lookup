@@ -62,6 +62,7 @@ public partial class Home : ComponentBase, IDisposable
                 _isBackendAvailable = isBackendAvailable;
                 _checkingBackend = false;
 
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
                 if (isBackendAvailable)
                 {
                     Snackbar.Add("Backend is available", Severity.Success);
