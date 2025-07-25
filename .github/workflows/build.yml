@@ -119,11 +119,11 @@ jobs:
      run: |
       cat ${{ env.BACKEND_APPSETTINGS_FILE }}
 
-   - name: Push Git Changes
+   - name: Create and push deploy branch
      run: |
+      git checkout -b deploy
       git commit -m "Release version ${{ env.VERSION }}"
-      git push origin HEAD
-      git push origin ${{ env.VERSION }}
+      git push origin deploy --force
 
  client-deploy:
   runs-on: ubuntu-latest
@@ -133,6 +133,8 @@ jobs:
   steps:
    - name: Checkout repository
      uses: actions/checkout@v4
+     with:
+       ref: deploy
 
    - name: Setup .NET
      uses: actions/setup-dotnet@v4
@@ -183,6 +185,8 @@ jobs:
   steps:
    - name: Checkout repository
      uses: actions/checkout@v4
+     with:
+       ref: deploy
 
    - name: Setup Docker Buildx
      uses: docker/setup-buildx-action@v3
