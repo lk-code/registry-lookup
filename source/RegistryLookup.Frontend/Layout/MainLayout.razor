@@ -1,6 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using dev.lkcode.RegistryLookup.Abstractions
+@inherits LayoutComponentBase
 
 @inject IConfiguration Configuration
+@inject IContentProvider ContentProvider
 
 @* Required *@
 <MudThemeProvider/>
@@ -37,6 +39,10 @@
             <MudMenuItem Target="_blank"
                          Href="https://github.com/lk-code/registry-lookup"
                          Icon="@Icons.Custom.Brands.GitHub"
+                         Label="On GitHub"/>
+            <MudMenuItem Target="_blank"
+                         Href="https://hub.docker.com/r/lkcode/registry-lookup"
+                         Icon="@IconSVG.MATERIAL_DOCKER"
                          Label="On GitHub"/>
         </MudMenu>
 
