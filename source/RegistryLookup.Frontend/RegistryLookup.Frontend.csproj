@@ -12,7 +12,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.7"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.7" PrivateAssets="all"/>
         <PackageReference Include="MudBlazor" Version="8.10.0" />
-        <PackageReference Include="RegistryLookup.Client" Version="1.0.25" />
+        <PackageReference Include="RegistryLookup.Client" Version="1.0.41" />
     </ItemGroup>
 
     <ItemGroup>
