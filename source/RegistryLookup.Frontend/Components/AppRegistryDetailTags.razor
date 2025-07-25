@@ -1,7 +1,19 @@
 <MudStack>
-    
-    <MudText Typo="Typo.caption">
-        AppRegistryDetailTags
-    </MudText>
+    <MudDataGrid T="string"
+                 Dense="true"
+                 Striped="true"
+                 Elevation="0"
+                 Items="@_tagItems"
+                 Class="mt-3">
 
+        <Columns>
+            <PropertyColumn Title="Tag" Property="x => x"/>
+        </Columns>
+
+        @* <PagerContent> *@
+        @*     <MudDataGridPager T="IRegistryItem"/> *@
+        @* </PagerContent> *@
+
+    </MudDataGrid>
+    
 </MudStack>

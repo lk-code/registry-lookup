@@ -7,4 +7,6 @@ public interface IRegistryHost
     Task<bool> IsAvailableAsync(CancellationToken cancellationToken);
 
     Task<IReadOnlyCollection<IRegistryItem>> GetIndexAsync(CancellationToken cancellationToken);
+    
+    Task<string> GetJsonAsync(string url, CancellationToken cancellationToken);
 }
