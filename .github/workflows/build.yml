@@ -121,6 +121,7 @@ jobs:
 
    - name: Create and push deploy branch
      run: |
+      git push origin ${{ env.VERSION }}
       git checkout -b deploy
       git commit -m "Release version ${{ env.VERSION }}"
       git push origin deploy --force
