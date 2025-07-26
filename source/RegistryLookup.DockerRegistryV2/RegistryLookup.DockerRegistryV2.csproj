@@ -1,15 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>dev.lkcode.RegistryLookup.DockerRegistryV2</RootNamespace>
+
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\RegistryLookup.Abstractions\RegistryLookup.Abstractions.csproj" />
       <ProjectReference Include="..\RegistryLookup.Core\RegistryLookup.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.7" />
     </ItemGroup>
 
 </Project>

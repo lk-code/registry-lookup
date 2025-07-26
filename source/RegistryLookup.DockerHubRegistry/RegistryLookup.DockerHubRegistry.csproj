@@ -1,10 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>dev.lkcode.RegistryLookup.DockerHubRegistry</RootNamespace>
+
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
     </PropertyGroup>
 
     <ItemGroup>

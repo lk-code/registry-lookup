@@ -1,8 +1,9 @@
-﻿@page "/"
+@page "/"
 
 @using dev.lkcode.RegistryLookup.Abstractions
 @using dev.lkcode.RegistryLookup.Frontend.Models
 @using dev.lkcode.RegistryLookup.Frontend.Components
+@using dev.lkcode.RegistryLookup.DockerRegistryV2
 
 @inject IRegistryHostFactory RegistryHostFactory
 @inject IBackendProvider BackendProvider
@@ -71,14 +72,27 @@
 
             </MudPaper>
         }
-        
+
         @if (_registryAvailable)
         {
             <MudPaper Elevation="25"
                       Class="mt-5 pa-0">
 
                 <AppRegistryIndex @ref="AppRegistryIndex"
+                                  OnRegistryItemSelected="RegistryItemSelected"
                                   RegistryHost="RegistryHost"/>
+
+            </MudPaper>
+        }
+
+        @if (_selectedRegistryItem is not null)
+        {
+            <MudPaper Elevation="25"
+                      Class="mt-5 pa-0">
+                
+                <DockerContainer />
+
+                <AppRegistryDetails RegistryItem="@_selectedRegistryItem"/>
 
             </MudPaper>
         }

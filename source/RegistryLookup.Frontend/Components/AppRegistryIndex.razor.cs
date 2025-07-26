@@ -1,5 +1,6 @@
 using dev.lkcode.RegistryLookup.Abstractions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace dev.lkcode.RegistryLookup.Frontend.Components;
 
@@ -15,6 +16,9 @@ public partial class AppRegistryIndex : ComponentBase, IDisposable
 
     [Parameter]
     public required IRegistryHost RegistryHost { get; set; }
+
+    [Parameter]
+    public EventCallback<IRegistryItem> OnRegistryItemSelected { get; set; }
 
     public void Dispose()
     {
@@ -97,4 +101,20 @@ public partial class AppRegistryIndex : ComponentBase, IDisposable
 
         return false;
     };
+
+    private async Task SelectedItemsChanged(HashSet<IRegistryItem> items)
+    {
+        if (items.Any())
+        {
+            await SelectRegistryItem(items.First());
+        }
+    }
+
+    private async Task SelectRegistryItem(IRegistryItem item)
+    {
+        if (OnRegistryItemSelected.HasDelegate)
+        {
+            await OnRegistryItemSelected.InvokeAsync(item);
+        }
+    }
 }

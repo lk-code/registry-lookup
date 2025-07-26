@@ -23,6 +23,7 @@ public partial class Home : ComponentBase, IDisposable
     private bool _registryAvailable = false;
     private RegistryHostModel? _selectedHost;
     private List<RegistryHostModel> _hosts = [];
+    private IRegistryItem? _selectedRegistryItem = null;
 
     public void Dispose()
     {
@@ -195,5 +196,10 @@ public partial class Home : ComponentBase, IDisposable
                 StateHasChanged();
             });
         }
+    }
+
+    private void RegistryItemSelected(IRegistryItem item)
+    {
+        _selectedRegistryItem = item;
     }
 }
